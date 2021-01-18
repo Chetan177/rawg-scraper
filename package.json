@@ -1,0 +1,22 @@
+{
+  "name": "rawg-scrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chetan177/rawg-scrapper.git"
+  },
+  "author": "chetan177",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Chetan177/rawg-scrapper/issues"
+  },
+  "homepage": "https://github.com/Chetan177/rawg-scrapper#readme",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
