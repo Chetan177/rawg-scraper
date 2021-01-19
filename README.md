@@ -31,7 +31,7 @@ node index.js
 I have successfully collect 12000 games dummy data using this scraper
 
 ## Screenshot
-![image]("extra/db.png")
+![screenshot](./extra/db.png)
 
 ## License
 Use only for personal project.
