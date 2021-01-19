@@ -6,7 +6,7 @@ const DB_URI = "mongodb://localhost:27017/"
 const DB_Name = "gamesdb"
 
 const dataDir = "data/page-"
-// 'https://api.rawg.io/api/games?page=1?page_size=40'
+// 'https://api.rawg.io/api/games?page=12345?page_size=40'
 
 
 const startPage = 1;
@@ -18,7 +18,7 @@ const main = async function () {
     await dbClient.connect();
     databasesList = await dbClient.db().admin().listDatabases();
 
-    for (i = startPage; i <= endPage; i++) {
+    for (i = startPage;; i++) {
 
         const URL = `https://api.rawg.io/api/games?page=${i}&page_size=40`
 
@@ -26,9 +26,10 @@ const main = async function () {
 
             let data = response.data.results
             data.forEach(function (element, index) {
-                data[index]._id = String(element.id) + element.slug
+                data[index]._id = element.id
             });
 
+            console.log(`collected data of page ${i}`)
             insertIntoDB(dbClient, data)
 
         }).catch(function (error) {
