@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Chetan177/rawg-scrapper#readme",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "mongodb": "^3.6.3"
   }
 }
