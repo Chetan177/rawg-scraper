@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { MongoClient } = require('mongodb');
+const fs = require('fs');
 
 // const DB_URI = "mongodb+srv://<username>:<password>@<your-cluster-url>/test?retryWrites=true&w=majority"
 const DB_URI = "mongodb://localhost:27017/"
@@ -9,7 +10,8 @@ const dataDir = "data/page-"
 // 'https://api.rawg.io/api/games?page=12345?page_size=40'
 
 
-const startPage = 1;
+const pageDone = require('./pagedone.json')
+const startPage = pageDone.pageDone
 
 const dbClient = new MongoClient(DB_URI);
 
@@ -24,13 +26,16 @@ const main = async function () {
         await axios.get(URL).then(function (response) {
 
             let data = response.data.results
-            data.forEach(function (element, index) {
+            data.forEach(function (element) {
                 element._id = element.id
                 // insert one by one
                 insertIntoDB(dbClient, element)
             });
 
             console.log(`collected data of page ${i}`)
+
+            let dataPage = JSON.stringify({ pageDone: i });
+            fs.writeFileSync('pagedone.json', dataPage);
 
             // insertIntoDB(dbClient, data)
 
