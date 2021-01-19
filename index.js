@@ -10,7 +10,6 @@ const dataDir = "data/page-"
 
 
 const startPage = 1;
-const endPage = 2;
 
 const dbClient = new MongoClient(DB_URI);
 
@@ -18,7 +17,7 @@ const main = async function () {
     await dbClient.connect();
     databasesList = await dbClient.db().admin().listDatabases();
 
-    for (i = startPage;; i++) {
+    for (i = startPage; ; i++) {
 
         const URL = `https://api.rawg.io/api/games?page=${i}&page_size=40`
 
@@ -26,11 +25,14 @@ const main = async function () {
 
             let data = response.data.results
             data.forEach(function (element, index) {
-                data[index]._id = element.id
+                element._id = element.id
+                // insert one by one
+                insertIntoDB(dbClient, element)
             });
 
             console.log(`collected data of page ${i}`)
-            insertIntoDB(dbClient, data)
+
+            // insertIntoDB(dbClient, data)
 
         }).catch(function (error) {
             console.log(error);
@@ -38,15 +40,16 @@ const main = async function () {
 
     }
 
-    dbClient.close();
 }
 
 const insertIntoDB = async function (client, data) {
     var dbObj = client.db(DB_Name)
-    dbObj.collection("games").insertMany(data, function (err, res) {
-        if (err && err.code === 11000) { console.error("got duplicate key") }
-        if (err) { console.error(err) }
-        console.log(`${res.insertedCount} doc added`);
+    dbObj.collection("games").insertOne(data, function (err, res) {
+        if (err) {
+            if (err && err.code === 11000) { console.error(`got duplicate key ${data._id}`) }
+            return
+        }
+        console.log(` id: ${data._id} doc added`);
     });
 
 }
